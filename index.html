@@ -1,38 +1,960 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cucina Quadrifoglio</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cucina Quadrifoglio</title>
 
-<style>
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+    }
 
-body{
-margin:0;
-font-family:Arial;
-background:#111;
-color:white;
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
-text-align:center;
-}
+    :root{
+      --cream:#fff7df;
+      --cream2:#fff0c8;
+      --tomato:#ef3f2e;
+      --basil:#2f8f57;
+      --pasta:#ffc857;
+      --orange:#ff8a3d;
+      --brown:#59351f;
+      --ink:#2b2118;
+      --white:#ffffff;
+      --shadow:0 20px 50px rgba(89,53,31,.18);
+      --radius:28px;
+    }
 
-h1{
-font-size:60px;
-}
+    html{
+      scroll-behavior:smooth;
+    }
 
-</style>
+    body{
+      font-family: Arial, sans-serif;
+      background:var(--cream);
+      color:var(--ink);
+      overflow-x:hidden;
+    }
 
+    a{
+      text-decoration:none;
+      color:inherit;
+    }
+
+    .floating-bg{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:-1;
+      overflow:hidden;
+    }
+
+    .blob{
+      position:absolute;
+      border-radius:50%;
+      opacity:.35;
+      filter:blur(6px);
+      animation:float 9s ease-in-out infinite;
+    }
+
+    .blob.one{
+      width:180px;
+      height:180px;
+      background:var(--tomato);
+      top:8%;
+      left:-40px;
+    }
+
+    .blob.two{
+      width:220px;
+      height:220px;
+      background:var(--pasta);
+      right:-60px;
+      top:35%;
+      animation-delay:2s;
+    }
+
+    .blob.three{
+      width:160px;
+      height:160px;
+      background:var(--basil);
+      left:12%;
+      bottom:8%;
+      animation-delay:4s;
+    }
+
+    @keyframes float{
+      0%,100%{transform:translateY(0) scale(1);}
+      50%{transform:translateY(-25px) scale(1.06);}
+    }
+
+    header{
+      position:sticky;
+      top:0;
+      z-index:50;
+      background:rgba(255,247,223,.88);
+      backdrop-filter:blur(14px);
+      border-bottom:1px solid rgba(89,53,31,.12);
+    }
+
+    .nav{
+      max-width:1180px;
+      margin:auto;
+      padding:18px 22px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:20px;
+    }
+
+    .logo{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-weight:900;
+      color:var(--brown);
+      font-size:20px;
+    }
+
+    .logo-mark{
+      width:42px;
+      height:42px;
+      background:linear-gradient(135deg,var(--basil),#8bd35e);
+      border-radius:16px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:white;
+      box-shadow:0 8px 20px rgba(47,143,87,.28);
+    }
+
+    .menu{
+      display:flex;
+      gap:20px;
+      font-size:14px;
+      font-weight:700;
+    }
+
+    .nav-cta{
+      padding:12px 18px;
+      border-radius:999px;
+      background:var(--tomato);
+      color:white;
+      font-weight:800;
+      box-shadow:0 10px 24px rgba(239,63,46,.26);
+    }
+
+    .hero{
+      min-height:88vh;
+      max-width:1180px;
+      margin:auto;
+      padding:80px 22px 60px;
+      display:grid;
+      grid-template-columns:1.05fr .95fr;
+      gap:50px;
+      align-items:center;
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      background:white;
+      color:var(--brown);
+      padding:10px 15px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:800;
+      box-shadow:var(--shadow);
+      margin-bottom:22px;
+    }
+
+    .hero h1{
+      font-size:clamp(48px,7vw,92px);
+      line-height:.95;
+      color:var(--brown);
+      letter-spacing:-3px;
+      margin-bottom:22px;
+      animation:rise .8s ease both;
+    }
+
+    .hero h1 span{
+      color:var(--tomato);
+    }
+
+    .hero p{
+      font-size:21px;
+      line-height:1.55;
+      color:#624734;
+      max-width:620px;
+      animation:rise .9s ease both;
+    }
+
+    @keyframes rise{
+      from{opacity:0;transform:translateY(24px);}
+      to{opacity:1;transform:translateY(0);}
+    }
+
+    .hero-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:14px;
+      margin-top:32px;
+    }
+
+    .btn{
+      border:none;
+      cursor:pointer;
+      border-radius:999px;
+      padding:16px 24px;
+      font-weight:900;
+      font-size:15px;
+      transition:.25s ease;
+      display:inline-flex;
+      align-items:center;
+      gap:9px;
+    }
+
+    .btn-primary{
+      background:var(--basil);
+      color:white;
+      box-shadow:0 12px 28px rgba(47,143,87,.25);
+    }
+
+    .btn-secondary{
+      background:white;
+      color:var(--brown);
+      box-shadow:var(--shadow);
+    }
+
+    .btn:hover{
+      transform:translateY(-4px) scale(1.02);
+    }
+
+    .hero-card{
+      background:linear-gradient(160deg,#ffffff,#fff1c8);
+      border-radius:42px;
+      padding:22px;
+      box-shadow:var(--shadow);
+      position:relative;
+      animation:cardFloat 5s ease-in-out infinite;
+    }
+
+    @keyframes cardFloat{
+      0%,100%{transform:translateY(0);}
+      50%{transform:translateY(-10px);}
+    }
+
+    .recipe-preview{
+      border-radius:32px;
+      min-height:420px;
+      background:
+        linear-gradient(rgba(0,0,0,.12),rgba(0,0,0,.35)),
+        url("https://images.unsplash.com/photo-1528712306091-ed0763094c98?auto=format&fit=crop&w=1200&q=80");
+      background-size:cover;
+      background-position:center;
+      padding:28px;
+      display:flex;
+      flex-direction:column;
+      justify-content:flex-end;
+      color:white;
+      overflow:hidden;
+    }
+
+    .recipe-preview h3{
+      font-size:34px;
+      margin-bottom:10px;
+    }
+
+    .recipe-tags{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:14px;
+    }
+
+    .tag{
+      background:rgba(255,255,255,.9);
+      color:var(--brown);
+      padding:8px 11px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:900;
+    }
+
+    section{
+      max-width:1180px;
+      margin:auto;
+      padding:70px 22px;
+    }
+
+    .section-title{
+      text-align:center;
+      margin-bottom:38px;
+    }
+
+    .section-title small{
+      color:var(--tomato);
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:1px;
+    }
+
+    .section-title h2{
+      font-size:clamp(34px,5vw,58px);
+      color:var(--brown);
+      margin-top:8px;
+      letter-spacing:-2px;
+    }
+
+    .grid-3{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:22px;
+    }
+
+    .feature{
+      background:white;
+      border-radius:var(--radius);
+      padding:28px;
+      box-shadow:var(--shadow);
+      transition:.25s ease;
+    }
+
+    .feature:hover{
+      transform:translateY(-8px);
+    }
+
+    .icon{
+      width:54px;
+      height:54px;
+      border-radius:18px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:28px;
+      background:var(--cream2);
+      margin-bottom:18px;
+    }
+
+    .feature h3{
+      font-size:23px;
+      color:var(--brown);
+      margin-bottom:10px;
+    }
+
+    .feature p{
+      color:#715641;
+      line-height:1.55;
+    }
+
+    .recipes{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:24px;
+    }
+
+    .card{
+      background:white;
+      border-radius:32px;
+      overflow:hidden;
+      box-shadow:var(--shadow);
+      position:relative;
+      transition:.28s ease;
+    }
+
+    .card:hover{
+      transform:translateY(-10px) rotate(-1deg);
+    }
+
+    .card-img{
+      height:220px;
+      background-size:cover;
+      background-position:center;
+      position:relative;
+    }
+
+    .lock{
+      position:absolute;
+      top:16px;
+      right:16px;
+      background:var(--tomato);
+      color:white;
+      padding:9px 12px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:900;
+    }
+
+    .price-badge{
+      position:absolute;
+      left:16px;
+      bottom:16px;
+      background:var(--pasta);
+      color:var(--brown);
+      padding:9px 12px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:900;
+    }
+
+    .card-body{
+      padding:24px;
+    }
+
+    .card h3{
+      font-size:24px;
+      color:var(--brown);
+      margin-bottom:10px;
+    }
+
+    .card p{
+      color:#70533d;
+      line-height:1.5;
+      margin-bottom:18px;
+    }
+
+    .mini-info{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-bottom:18px;
+    }
+
+    .mini-info span{
+      background:#fff3cd;
+      padding:7px 10px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:800;
+      color:var(--brown);
+    }
+
+    .audio-box{
+      background:linear-gradient(135deg,#fff1c8,#ffffff);
+      border:2px dashed rgba(239,63,46,.28);
+      border-radius:28px;
+      padding:28px;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:28px;
+      align-items:center;
+      box-shadow:var(--shadow);
+    }
+
+    .audio-player{
+      background:white;
+      border-radius:26px;
+      padding:22px;
+      box-shadow:0 14px 34px rgba(89,53,31,.12);
+    }
+
+    .play-row{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      margin-bottom:18px;
+    }
+
+    .play-btn{
+      width:58px;
+      height:58px;
+      border-radius:50%;
+      border:none;
+      background:var(--tomato);
+      color:white;
+      font-size:22px;
+      cursor:pointer;
+      box-shadow:0 12px 24px rgba(239,63,46,.25);
+    }
+
+    .wave{
+      display:flex;
+      align-items:end;
+      gap:5px;
+      height:52px;
+    }
+
+    .wave span{
+      width:8px;
+      border-radius:999px;
+      background:var(--basil);
+      animation:wave 1.2s ease-in-out infinite;
+    }
+
+    .wave span:nth-child(1){height:18px;}
+    .wave span:nth-child(2){height:34px;animation-delay:.1s;}
+    .wave span:nth-child(3){height:24px;animation-delay:.2s;}
+    .wave span:nth-child(4){height:44px;animation-delay:.3s;}
+    .wave span:nth-child(5){height:28px;animation-delay:.4s;}
+    .wave span:nth-child(6){height:38px;animation-delay:.5s;}
+    .wave span:nth-child(7){height:20px;animation-delay:.6s;}
+
+    @keyframes wave{
+      0%,100%{transform:scaleY(.7);}
+      50%{transform:scaleY(1.25);}
+    }
+
+    .paywall{
+      margin-top:20px;
+      padding:22px;
+      border-radius:24px;
+      background:#fff7df;
+      border:1px solid rgba(89,53,31,.12);
+      text-align:center;
+    }
+
+    .pricing{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:22px;
+    }
+
+    .price-card{
+      background:white;
+      border-radius:32px;
+      padding:30px;
+      box-shadow:var(--shadow);
+      text-align:center;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .price-card.featured{
+      background:linear-gradient(160deg,var(--tomato),#ff8a3d);
+      color:white;
+      transform:scale(1.04);
+    }
+
+    .price-card h3{
+      font-size:24px;
+      margin-bottom:10px;
+    }
+
+    .price{
+      font-size:44px;
+      font-weight:900;
+      margin:20px 0;
+    }
+
+    .price-card p{
+      line-height:1.55;
+      margin-bottom:22px;
+    }
+
+    .bags{
+      background:linear-gradient(135deg,#7b4b2a,#c5834a);
+      border-radius:42px;
+      padding:48px;
+      color:white;
+      display:grid;
+      grid-template-columns:1fr .8fr;
+      gap:28px;
+      align-items:center;
+      box-shadow:var(--shadow);
+    }
+
+    .coming{
+      display:inline-block;
+      background:white;
+      color:#7b4b2a;
+      padding:10px 14px;
+      border-radius:999px;
+      font-weight:900;
+      margin-bottom:18px;
+    }
+
+    .bag-card{
+      background:rgba(255,255,255,.16);
+      border:1px solid rgba(255,255,255,.25);
+      border-radius:30px;
+      padding:28px;
+      backdrop-filter:blur(10px);
+    }
+
+    footer{
+      background:var(--brown);
+      color:white;
+      padding:44px 22px;
+      text-align:center;
+      margin-top:70px;
+    }
+
+    .whatsapp{
+      position:fixed;
+      right:18px;
+      bottom:18px;
+      z-index:90;
+      background:#25d366;
+      color:white;
+      padding:15px 18px;
+      border-radius:999px;
+      font-weight:900;
+      box-shadow:0 14px 30px rgba(37,211,102,.35);
+    }
+
+    .reveal{
+      opacity:0;
+      transform:translateY(35px);
+      transition:.8s ease;
+    }
+
+    .reveal.visible{
+      opacity:1;
+      transform:translateY(0);
+    }
+
+    @media(max-width:900px){
+      .hero,
+      .audio-box,
+      .bags{
+        grid-template-columns:1fr;
+      }
+
+      .grid-3,
+      .recipes,
+      .pricing{
+        grid-template-columns:1fr;
+      }
+
+      .menu{
+        display:none;
+      }
+
+      .hero{
+        padding-top:54px;
+      }
+
+      .recipe-preview{
+        min-height:360px;
+      }
+
+      .price-card.featured{
+        transform:none;
+      }
+    }
+
+    @media(max-width:520px){
+      .nav{
+        padding:14px 16px;
+      }
+
+      .logo{
+        font-size:17px;
+      }
+
+      .nav-cta{
+        display:none;
+      }
+
+      section{
+        padding:56px 16px;
+      }
+
+      .hero{
+        padding:54px 16px;
+      }
+
+      .hero h1{
+        letter-spacing:-2px;
+      }
+
+      .hero p{
+        font-size:18px;
+      }
+
+      .btn{
+        width:100%;
+        justify-content:center;
+      }
+
+      .bags{
+        padding:30px;
+        border-radius:30px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-<div>
-<h1>Cucina Quadrifoglio</h1>
-<p>Sito in arrivo</p>
-</div>
+  <div class="floating-bg">
+    <div class="blob one"></div>
+    <div class="blob two"></div>
+    <div class="blob three"></div>
+  </div>
+
+  <header>
+    <nav class="nav">
+      <a href="#" class="logo">
+        <span class="logo-mark">🍀</span>
+        Cucina Quadrifoglio
+      </a>
+
+      <div class="menu">
+        <a href="#ricette">Ricette</a>
+        <a href="#audio">Audio</a>
+        <a href="#prezzi">Sblocca</a>
+        <a href="#borse">Borse</a>
+      </div>
+
+      <a href="#prezzi" class="nav-cta">Sblocca ricette</a>
+    </nav>
+  </header>
+
+  <main>
+
+    <section class="hero">
+      <div>
+        <div class="badge">🍝 Ricette semplici, vere e convenienti</div>
+
+        <h1>
+          La cucina di casa, <span>spiegata bene.</span>
+        </h1>
+
+        <p>
+          Ricette semplici, economiche e con una storia. Piatti che funzionano davvero,
+          pensati per chi vuole cucinare bene senza spendere troppo.
+        </p>
+
+        <div class="hero-actions">
+          <a href="#ricette" class="btn btn-primary">Sfoglia le ricette</a>
+          <a href="#audio" class="btn btn-secondary">Ascolta la ricetta</a>
+        </div>
+      </div>
+
+      <div class="hero-card">
+        <div class="recipe-preview">
+          <h3>Pasta e patate della domenica</h3>
+          <p>Una ricetta povera, cremosa e piena di ricordi.</p>
+
+          <div class="recipe-tags">
+            <span class="tag">💸 meno di 2€ a persona</span>
+            <span class="tag">⏱ 35 min</span>
+            <span class="tag">🎧 audio incluso</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="reveal">
+      <div class="section-title">
+        <small>Perché funziona</small>
+        <h2>Non solo ricette. Storie da cucinare.</h2>
+      </div>
+
+      <div class="grid-3">
+        <div class="feature">
+          <div class="icon">💸</div>
+          <h3>Costano poco</h3>
+          <p>Ogni ricetta mostra il costo indicativo, così sai subito quanto spendi davvero.</p>
+        </div>
+
+        <div class="feature">
+          <div class="icon">👩‍🍳</div>
+          <h3>Riescono davvero</h3>
+          <p>Passaggi semplici, consigli pratici ed errori da evitare per non sbagliare.</p>
+        </div>
+
+        <div class="feature">
+          <div class="icon">🎧</div>
+          <h3>Audio ricette</h3>
+          <p>Ascolti la voce mentre cucini, come se qualcuno ti guidasse passo dopo passo.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="ricette" class="reveal">
+      <div class="section-title">
+        <small>Ricette in evidenza</small>
+        <h2>Assaggia gratis, sblocca il resto.</h2>
+      </div>
+
+      <div class="recipes">
+
+        <article class="card">
+          <div class="card-img" style="background-image:url('https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?auto=format&fit=crop&w=900&q=80');">
+            <span class="lock">🔒 Premium</span>
+            <span class="price-badge">€1,99</span>
+          </div>
+          <div class="card-body">
+            <h3>Pasta cremosa salvacena</h3>
+            <p>Perfetta quando hai poco in frigo ma vuoi portare a tavola qualcosa di buono.</p>
+            <div class="mini-info">
+              <span>25 min</span>
+              <span>Facile</span>
+              <span>4 persone</span>
+            </div>
+            <div class="paywall">
+              Anteprima gratuita disponibile. Dosi e audio si sbloccano.
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-img" style="background-image:url('https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=900&q=80');">
+            <span class="lock">🔓 Gratis</span>
+            <span class="price-badge">meno di 5€</span>
+          </div>
+          <div class="card-body">
+            <h3>Insalata ricca di casa</h3>
+            <p>Semplice, colorata e completa. Una ricetta veloce che salva pranzo e cena.</p>
+            <div class="mini-info">
+              <span>15 min</span>
+              <span>Facile</span>
+              <span>Leggera</span>
+            </div>
+            <a href="#audio" class="btn btn-primary">Ascolta anteprima</a>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-img" style="background-image:url('https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=900&q=80');">
+            <span class="lock">🔒 Premium</span>
+            <span class="price-badge">€1,99</span>
+          </div>
+          <div class="card-body">
+            <h3>Dolce semplice della mamma</h3>
+            <p>Un dolce economico, morbido e profumato, perfetto per colazione o merenda.</p>
+            <div class="mini-info">
+              <span>45 min</span>
+              <span>Forno</span>
+              <span>Famiglia</span>
+            </div>
+            <div class="paywall">
+              Storia gratis. Procedimento completo e trucchi premium.
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <section id="audio" class="reveal">
+      <div class="audio-box">
+        <div>
+          <div class="section-title" style="text-align:left;margin-bottom:16px;">
+            <small>Audio ricette</small>
+            <h2>Cucina ascoltando la voce di casa.</h2>
+          </div>
+
+          <p style="font-size:18px;line-height:1.6;color:#624734;">
+            Ogni ricetta premium può avere un audio: consigli, storia del piatto,
+            passaggi importanti e piccoli segreti per farla venire bene.
+          </p>
+        </div>
+
+        <div class="audio-player">
+          <div class="play-row">
+            <button class="play-btn" onclick="toggleDemoAudio()">▶</button>
+            <div>
+              <strong>Anteprima audio</strong><br>
+              <span style="color:#7b614c;">“Questa ricetta nasce quando in casa c’era poco…”</span>
+            </div>
+          </div>
+
+          <div class="wave">
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+          </div>
+
+          <audio id="demoAudio">
+            <source src="" type="audio/mpeg">
+          </audio>
+
+          <p style="margin-top:16px;color:#715641;line-height:1.5;">
+            Qui potrai inserire i veri audio registrati da tua mamma.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="prezzi" class="reveal">
+      <div class="section-title">
+        <small>Sblocca le ricette</small>
+        <h2>Scegli come entrare in cucina.</h2>
+      </div>
+
+      <div class="pricing">
+        <div class="price-card">
+          <h3>Ricetta singola</h3>
+          <div class="price">€1,99</div>
+          <p>Perfetta per sbloccare una ricetta completa con dosi, procedimento e consigli.</p>
+          <a href="#" class="btn btn-secondary">Sblocca una ricetta</a>
+        </div>
+
+        <div class="price-card featured">
+          <h3>Pacchetto casa</h3>
+          <div class="price">€6,99</div>
+          <p>5 ricette complete, audio inclusi e piccoli trucchi per cucinare meglio.</p>
+          <a href="#" class="btn btn-secondary">Prendi il pacchetto</a>
+        </div>
+
+        <div class="price-card">
+          <h3>Abbonamento</h3>
+          <div class="price">€4,99</div>
+          <p>Accesso alle ricette premium, nuove uscite e audio ricette ogni mese.</p>
+          <a href="#" class="btn btn-primary">Abbonati</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="borse" class="reveal">
+      <div class="bags">
+        <div>
+          <span class="coming">In progress</span>
+          <h2 style="font-size:clamp(34px,5vw,56px);line-height:1;margin-bottom:18px;">
+            Borse fatte a mano
+          </h2>
+          <p style="font-size:18px;line-height:1.6;">
+            Un’altra passione di casa Quadrifoglio: pezzi unici, realizzati a mano,
+            presto disponibili online.
+          </p>
+        </div>
+
+        <div class="bag-card">
+          <h3 style="font-size:26px;margin-bottom:12px;">Atelier Quadrifoglio</h3>
+          <p style="line-height:1.6;">
+            Questa sezione sarà dedicata alle creazioni artigianali. Per ora resta in anteprima.
+          </p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <a class="whatsapp" href="https://wa.me/" target="_blank">
+    WhatsApp
+  </a>
+
+  <footer>
+    <h3>Cucina Quadrifoglio 🍀</h3>
+    <p style="margin-top:10px;color:rgba(255,255,255,.75);">
+      Ricette semplici, economiche e con una storia.
+    </p>
+  </footer>
+
+  <script>
+    const reveals = document.querySelectorAll('.reveal');
+
+    function revealOnScroll(){
+      reveals.forEach(section => {
+        const top = section.getBoundingClientRect().top;
+        const windowHeight = window.innerHeight;
+
+        if(top < windowHeight - 100){
+          section.classList.add('visible');
+        }
+      });
+    }
+
+    window.addEventListener('scroll', revealOnScroll);
+    revealOnScroll();
+
+    function toggleDemoAudio(){
+      alert("Qui inseriremo l'audio vero della ricetta registrato da tua mamma.");
+    }
+  </script>
 
 </body>
 </html>
